@@ -23,7 +23,7 @@
 
 ### axios
 
-В папке `/api` находится сконфигурированный клиент API — `axiosInstance`, а также вспомогательные функции и типы для его работы. В нашем проекте, помимо стандартного `ApiResponse`, определены кастомные `AxiosInstance`, `AxiosError` и различные дженерики для работы с API.
+В папке `/api` находится сконфигурированный клиент API — `axiosInstance`, а также вспомогательные функции и типы для его работы. В нашем проекте, выходящем за рамки доклада, помимо стандартного `ApiResponse`, определены кастомные `AxiosInstance`, `AxiosError` и различные дженерики для работы с API.
 
 #### Типы и интерфейсы
 
@@ -95,21 +95,21 @@ const request = this.httpClient.postForm<StatusResponse>("/admin/popup/remove", 
 
 ### С базовым сервисом
 
-- **UsersService:** Этот вариант предпочтительнее для унификации работы с сервисами.
+- [UsersService](https://github.com/VaniaFed/service-layer/blob/master/src/service/UsersService.ts): Этот вариант предпочтительнее, поскольку обладает более элегантным синтаксисом.
 
 ### Без базового сервиса
 
-- **PostsService:** Пример использования без базового сервиса.
+- [PostsService](https://github.com/VaniaFed/service-layer/blob/master/src/service/PostsService.ts): Пример использования без базового сервиса. Добавлен скорее в качестве промежуточного примера.
 
-## Варианты использования промежуточного слоя
+## Варианты использования сервиса
 
 ### В композабле
 
-- **useUser:** Предпочтительно для более сложных компонентов.
+- [useUser](https://github.com/VaniaFed/service-layer/blob/master/src/composables/useUser.ts) Предпочтительноее для более сложных компонентов и повторяющейся логики.
 
 ### Без композабла
 
-- Прямое использование в компоненте для простых задач.
+- [handleGetPostList](https://github.com/VaniaFed/service-layer/blob/master/src/pages/IndexPage.vue#L9) Прямое использование в компоненте. Оправдано в простейших компонентах.
 
 ## Обработка данных на IndexPage.vue
 
