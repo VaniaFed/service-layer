@@ -1,19 +1,127 @@
-# service-layer
+# Сервисный слой
 
-## Project Setup
+## Примеры реализации сервисного слоя
+
+### С базовым сервисом
+
+- **UsersService:** Этот вариант предпочтительнее, так как он предоставляет более удобный подход к работе с сервисами.
+
+### Без базового сервиса
+
+- **PostsService:** Использование без базового сервиса, добавлен скорее в качестве промежуточного примера.
+
+## Варианты использования промежуточного слоя
+
+### В композабле
+
+- **useUser:** Этот вариант предпочтительнее для более сложных компонентов, так как он позволяет легко переиспользовать код и улучшает читаемость.
+
+### Без композабла
+
+- Прямое использование в компоненте. Этот подход может быть удобным для простых компонентов с минимальной бизнес-логикой.
+
+## Обработка данных на IndexPage.vue
+
+При загрузке страницы **IndexPage.vue** выполняются следующие действия:
+
+- Вызов списка пользователей через `handleGetUserList`.
+- Вызов списка постов через `handleGetPostList`.
+
+В случае возникновения ошибки во время запроса, происходит вывод уведомления с использованием `alert`.
+
+## Функциональность инпута
+
+- Пользователь может вводить значения от 1 до 10 (включительно) в инпут, чтобы запрашивать пользователя с указанным `id`.
+- При вводе значения вне этого диапазона, произойдет вывод уведомления об ошибке с использованием `alert`.
+
+## Структура проекта
+
+### Сервисы
+
+Обратите внимание на папку `/services`. Там расположены все сервисы, включая `BaseService`.
+
+### axios
+
+В папке `/api` расположен сконфигурированный клиент API — `axiosInstance`, а также вспомогательные функции и типы для его работы. В нашем проекте, помимо стандартного `ApiResponse`, определены кастомные `AxiosInstance`, `AxiosError` и различные дженерики для работы с API.
+
+#### Типы и интерфейсы
+
+**Пример типов и интерфейсов в файле `types.ts`:**
+
+```ts
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable prettier/prettier */
+import type {
+  AxiosRequestConfig,
+  AxiosResponse,
+  AxiosError as _AxiosError,
+  AxiosInstance as _AxiosInstance,
+} from "axios";
+
+export interface AxiosInstance extends _AxiosInstance {
+  request<T = StatusResponse, R = AxiosResponse<T>, D = any>(config: AxiosRequestConfig<D>): Promise<R>;
+  get<T = StatusResponse, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+  delete<T = StatusResponse, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+  head<T = StatusResponse, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+  options<T = StatusResponse, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+  post<T = StatusResponse, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+  put<T = StatusResponse, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+  patch<T = StatusResponse, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+  postForm<T = StatusResponse, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+  putForm<T = StatusResponse, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+  patchForm<T = StatusResponse, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+}
+
+export type AxiosError<T = StatusResponse> = _AxiosError<T>;
+
+export type ApiResponse<T> = [null, T] | [Error];
+
+export interface StatusResponse {
+  status: "OK" | "ERROR";
+  message: string;
+}
+
+export interface StatusDataResponse<T> extends StatusResponse {
+  data: T;
+}
+
+interface PagedResponse<T> {
+  page: number;
+  pageSize: number;
+  pages: number;
+  total: number;
+  records: T[];
+}
+
+export type PagedStatusDataResponse<T> = StatusDataResponse<PagedResponse<T>>;
+```
+
+### Специфика использования кастомных типов
+
+Везде, где встречаются `AxiosInstance` и `AxiosError`, используются кастомные версии вместо библиотечных. Это оправдано тем, что у нашего бэкенда для некоторых запросов повторяется ответ в формате `StatusResponse`. Соответственно, если не указан получаемый тип, как в следующем примере:
+
+```ts
+const request = this.httpClient.postForm("/admin/popup/remove", {
+  guid: id,
+});
+```
+
+По умолчанию устанавливается тип `StatusResponse`, то есть код выше эквивалентен следующему:
+
+```ts
+const request = this.httpClient.postForm<StatusResponse>("/admin/popup/remove", {
+  guid: id,
+});
+```
+
+## Инициализация проекта
 
 ```sh
 yarn
 ```
 
-### Compile and Hot-Reload for Development
+## Запуск проекта
 
 ```sh
 yarn dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-yarn build
 ```
