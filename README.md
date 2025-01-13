@@ -105,11 +105,11 @@ const request = this.httpClient.postForm<StatusResponse>("/admin/popup/remove", 
 
 ### В композабле
 
-- [useUser](https://github.com/VaniaFed/service-layer/blob/master/src/composables/useUser.ts) Предпочтительноее для более сложных компонентов и повторяющейся логики.
+- [useUser](https://github.com/VaniaFed/service-layer/blob/master/src/composables/useUser.ts): Предпочтительнее для более сложных компонентов и в случае переиспользования повторяющейся логики.
 
 ### Без композабла
 
-- [handleGetPostList](https://github.com/VaniaFed/service-layer/blob/master/src/pages/IndexPage.vue#L9) Прямое использование в компоненте. Оправдано в простейших компонентах.
+- [handleGetPostList](https://github.com/VaniaFed/service-layer/blob/master/src/pages/IndexPage.vue#L9): Прямое использование в компоненте. Оправдано в простейших компонентах.
 
 ## Обработка данных на IndexPage.vue
 
